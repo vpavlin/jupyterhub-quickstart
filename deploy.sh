@@ -11,7 +11,7 @@ function err() {
 
 DEPLOYER_TEMPLATE=jupyterhub-deployer
 IMAGE_STREAM_NAME=jupyterhub
-IMAGE_STREAM_NAME_NOTEBOOK=minimal-notebook
+IMAGE_STREAM_NAME_NOTEBOOK=s2i-minimal-notebook
 CM_KEY_NAME="jupyterhub_config.py"
 CM_NAME="${APPLICATION_NAME}-cfg"
 
@@ -45,12 +45,8 @@ if [ $? -ne 0 ]; then
   oc apply -f images.json
 fi
 
-log "Checking Template ${DEPLOYER_TEMPLATE}"
-oc get template ${DEPLOYER_TEMPLATE} --no-headers -o name &> /dev/null
-if [ $? -ne 0 ]; then
-  log "Template ${DEPLOYER_TEMPLATE} does not exist, applying..."
-  oc apply -f templates.yaml
-fi
+log "Applying ${DEPLOYER_TEMPLATE} template"
+oc apply -f templates.yaml
 
 log "Deploying ${DEPLOYER_TEMPLATE} as ${APPLICATION_NAME}"
 oc process ${DEPLOYER_TEMPLATE} -p APPLICATION_NAME=${APPLICATION_NAME} -p OPENSHIFT_URL=${OPENSHIFT_URL} | oc apply -f -

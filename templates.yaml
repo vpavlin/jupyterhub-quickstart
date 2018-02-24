@@ -80,7 +80,7 @@ items:
     value: jupyterhub:latest
     required: true
   - name: NOTEBOOK_IMAGE
-    value: minimal-notebook:3.5
+    value: s2i-minimal-notebook:3.5
     required: true
   - name: JUPYTERHUB_CONFIG
     value: ''
@@ -343,7 +343,7 @@ items:
     value: jupyterhub:latest
     required: true
   - name: BUILDER_IMAGE
-    value: minimal-notebook:3.5
+    value: s2i-minimal-notebook:3.5
     required: true
   - name: GIT_REPOSITORY_URL
     value: ''

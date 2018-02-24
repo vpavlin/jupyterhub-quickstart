@@ -38,7 +38,8 @@
                 "source": {
                     "type": "Git",
                     "git": {
-                        "uri": "https://github.com/jupyter-on-openshift/jupyterhub-quickstart.git"
+                        "uri": "https://github.com/vpavlin/jupyterhub-quickstart.git",
+                        "ref": "aicoe"
                     }
                 },
                 "strategy": {

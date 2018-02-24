@@ -7,5 +7,21 @@ set -eo pipefail
 PATH=$PATH:/opt/app-root/scripts
 
 # Execute the run script from the customised builder.
+SA_PATH="/var/run/secrets/kubernetes.io/serviceaccount/"
+NAMESPACE=$(cat ${SA_PATH}/namespace)
+
+if [ -z ${OAUTH_CLIENT_ID} ]; then
+  OAUTH_CLIENT_ID="system:serviceaccount:${NAMESPACE}:${JUPYTERHUB_SERVICE_NAME}"
+fi
+
+if [ -z ${OAUTH_CLIENT_SECRET} ]; then
+  TOKEN_PATH="${SA_PATH}token"
+  [ -e ${TOKEN_PATH} ] && OAUTH_CLIENT_SECRET=`cat ${TOKEN_PATH}`
+fi
+
+if [ -z ${OAUTH_CALLBACK_URL} ]; then
+  ROUTE_URL=$(curl -H "Authorization: Bearer ${OAUTH_CLIENT_SECRET}" -k https://openshift.default.svc.cluster.local/oapi/v1/namespaces/${NAMESPACE}/routes/${JUPYTERHUB_SERVICE_NAME} | grep host\": | sed 's/ *"host": *"\([^"]*\)".*/\1/' | uniq)
+  OAUTH_CALLBACK_URL="https://${ROUTE_URL}/hub/oauth_callback"
+fi
 
 exec /opt/app-root/builder/run

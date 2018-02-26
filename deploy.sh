@@ -49,7 +49,7 @@ log "Applying ${DEPLOYER_TEMPLATE} template"
 oc apply -f templates.yaml
 
 log "Deploying ${DEPLOYER_TEMPLATE} as ${APPLICATION_NAME}"
-oc process ${DEPLOYER_TEMPLATE} -p APPLICATION_NAME=${APPLICATION_NAME} -p OPENSHIFT_URL=${OPENSHIFT_URL} | oc apply -f -
+oc process ${DEPLOYER_TEMPLATE} -p APPLICATION_NAME=${APPLICATION_NAME} | oc apply -f -
 
 log "Updating config map ${CM_NAME} with content of ${JUPYTERHUB_CONFIG}"
 oc get cm ${CM_NAME} -o yaml > ${CM_NAME}-cm.yaml.bckp

@@ -24,4 +24,9 @@ if [ -z ${OAUTH_CALLBACK_URL} ]; then
   OAUTH_CALLBACK_URL="https://${ROUTE_URL}/hub/oauth_callback"
 fi
 
+if [ -z ${OPENSHIFT_URL} ]; then
+  API_URL=$(curl -H "Authorization: Bearer ${OAUTH_CLIENT_SECRET}" -k  https://openshift.default.svc.cluster.local/oapi | grep serverAddress\": | sed 's/ *"serverAddress": *"\([^"]*\)".*/\1/' | uniq)
+  OPENSHIFT_URL="https://${API_URL}"
+fi
+
 exec /opt/app-root/builder/run
